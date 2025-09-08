@@ -1,0 +1,11 @@
+<div class="p-6 text-white">
+  <h2 class="text-green-400 text-2xl font-bold mb-4">Reports</h2>
+
+  <button class="bg-green-500 px-4 py-2 rounded" (click)="generateReport()">📊 Generate Report</button>
+
+  <div *ngFor="let report of reports" class="p-4 bg-green-900 mt-4 rounded">
+    <h3>{{ report.name }}</h3>
+    <p>{{ report.date }}</p>
+    <button class="bg-blue-500 px-2 py-1 rounded" (click)="downloadReport(report)">Download</button>
+  </div>
+</div>

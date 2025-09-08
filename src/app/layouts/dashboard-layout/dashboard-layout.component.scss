@@ -1,0 +1,131 @@
+/* Layout */
+.layout {
+  display: flex;
+  height: 100vh;
+  background: #121f3c;
+  color: #f1f5f9;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  background: #1e293b;
+  padding: 1rem;
+}
+
+.sidebar .logo {
+  font-weight: bold;
+  color: #22c55e;
+  margin-bottom: 2rem;
+  font-size: 1.2rem;
+}
+
+.sidebar nav a {
+  display: block;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.5rem;
+  color: #cbd5e1;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+
+.sidebar nav a.active,
+.sidebar nav a:hover {
+  background: #22c55e;
+  color: #fff;
+}
+
+/* Main */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Topbar */
+.topbar {
+  background: #0f172a;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #1e293b;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Bell */
+.bell-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.3rem;
+  padding: 0.4rem;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+
+.bell-btn:hover {
+  background: rgba(34, 197, 94, 0.15);
+}
+
+.bell-btn .text-green {
+  color: #22c55e;
+}
+
+/* User Dropdown */
+.dropdown {
+  position: relative;
+}
+
+.user-btn {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+
+.user-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.menu {
+  position: absolute;
+  right: 0;
+  margin-top: 0.5rem;
+  width: 160px;
+  background: #1f2937;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  overflow: hidden;
+  z-index: 1000;
+}
+
+.menu a {
+  display: block;
+  padding: 0.75rem 1rem;
+  color: #f1f5f9;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.menu a:hover {
+  background: #374151;
+}
+
+/* Content */
+.content {
+  padding: 1.5rem;
+  background: #111827;
+  flex: 1;
+  overflow-y: auto;
+}

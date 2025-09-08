@@ -1,0 +1,53 @@
+$bg-dark: #0a0f1a;
+$bg-card: #0f2d2f;
+$green-main: #22c55e;
+$green-dark: #166534;
+$blue-dark: #1e293b;
+$text-light: #f1f5f9;
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: $bg-dark;
+  color: $text-light;
+}
+
+a {
+  color: $text-light;
+  text-decoration: none;
+  padding: 0.75rem 1rem;
+  display: block;
+  border-radius: 0.5rem;
+
+  &.active, &:hover {
+    background-color: $green-dark;
+    color: white;
+  }
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+
+  th, td {
+    border: 1px solid $green-dark;
+    padding: 0.75rem;
+    text-align: left;
+  }
+
+  thead {
+    background-color: $blue-dark;
+    color: $green-main;
+  }
+
+  tbody tr:hover {
+    background-color: $green-dark;
+  }
+}
+
+button {
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: 0.2s ease;
+}

@@ -1,0 +1,23 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <label>
+      Temuan:
+      <input formControlName="temuan" />
+    </label>
+  
+    <label>
+      Rekomendasi:
+      <input formControlName="rekomendasi" />
+    </label>
+  
+    <label>
+      Status:
+      <select formControlName="status">
+        <option value="Draft">Draft</option>
+        <option value="In Review">In Review</option>
+        <option value="Signed">Signed</option>
+      </select>
+    </label>
+  
+    <button type="submit">Save</button>
+  </form>
+  

@@ -1,0 +1,46 @@
+<div class="layout">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="logo">PT. SEI</div>
+    <nav>
+      <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+      <a routerLink="/evidence" routerLinkActive="active">Evidence</a>
+      <a routerLink="/audit-plan" routerLinkActive="active">Audit Plan</a>
+      <a routerLink="/reviews" routerLinkActive="active">Reviews</a>
+      <a routerLink="/reports" routerLinkActive="active">Reports</a>
+      <a routerLink="/admin" routerLinkActive="active">Admin</a>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <!-- Topbar -->
+    <header class="topbar">
+      <h2>Dashboard</h2>
+      <div class="actions">
+        <!-- Bell Button -->
+        <button class="bell-btn" aria-label="Notifications">
+          <span class="text-green">🔔</span>
+        </button>
+
+        <!-- User Dropdown -->
+        <div class="dropdown" [class.open]="isOpen" (mouseleave)="isOpen=false">
+          <button class="user-btn" (click)="isOpen=!isOpen">
+            User ▾
+          </button>
+
+          <div *ngIf="isOpen" class="menu">
+            <a href="#">Profile</a>
+            <a href="#">Settings</a>
+            <a href="#">Logout</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <section class="content">
+      <router-outlet></router-outlet>
+    </section>
+  </main>
+</div>

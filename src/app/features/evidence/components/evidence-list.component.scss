@@ -1,0 +1,65 @@
+.audit-container {
+    padding: 1rem;
+    color: #e5e7eb;
+    background: #0f1c1a;
+    min-height: 100vh;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .toolbar {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  
+    input {
+      flex: 1;
+      padding: 0.5rem;
+      border-radius: 6px;
+      border: none;
+    }
+  
+    .add-btn {
+      margin-left: 1rem;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 8px;
+      background: #166534;
+      color: white;
+      cursor: pointer;
+    }
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  
+    th, td {
+      padding: 0.75rem;
+      border-bottom: 1px solid #374151;
+    }
+  
+    th {
+      text-align: left;
+    }
+  }
+  
+  .status.Draft { background: #374151; padding: 4px 8px; border-radius: 6px; }
+  .status.In\ Review { background: #4b5563; padding: 4px 8px; border-radius: 6px; }
+  .status.Signed { background: #065f46; padding: 4px 8px; border-radius: 6px; }
+  
+  .progress-BelumTindak { background: #991b1b; padding: 4px 8px; border-radius: 6px; }
+.progress-DalamProses { background: #92400e; padding: 4px 8px; border-radius: 6px; }
+.progress-Tercapai    { background: #14532d; padding: 4px 8px; border-radius: 6px; }
+
+  
+  .edit-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  
