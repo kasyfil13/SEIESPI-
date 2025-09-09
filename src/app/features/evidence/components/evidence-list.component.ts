@@ -40,12 +40,25 @@ import jsPDF from 'jspdf';
           </div>
           <div class="modal-body">
             <div class="detail-grid">
-              <div class="detail-item"><label>ID : </label><span>{{ selectedEvidence.id }}</span></div>
-              <div class="detail-item"><label>Temuan : </label><span>{{ selectedEvidence.temuan }}</span></div>
-              <div class="detail-item"><label>Rekomendasi : </label><span>{{ selectedEvidence.rekomendasi }}</span></div>
-              <div class="detail-item"><label>Kriteria : </label><span>{{ selectedEvidence.kriteria }}</span></div>
-              <div class="detail-item"><label>Progress : </label><span>{{ selectedEvidence.progress }}</span></div>
-              <div class="detail-item"><label>Tanggal : </label><span>{{ selectedEvidence.tanggal }}</span></div>
+              <div class="detail-item"><label>Temuan : </label>
+              <br>
+              <span>{{ selectedEvidence.temuan }}</span></div>
+              <div class="detail-item"><label>Rekomendasi : </label>
+              <br>
+              <span>{{ selectedEvidence.rekomendasi }}</span></div>
+              <div class="detail-item"><label>Status : </label>
+              <br>
+              <span>{{ selectedEvidence.status }}</span></div>
+              <div class="detail-item"><label>Kriteria : </label>
+              <br>
+              <span>{{ selectedEvidence.kriteria }}</span></div>
+              <div class="detail-item"><label>Progress : </label>
+              <br>
+              <span>{{ selectedEvidence.progress }}</span></div>
+              <div class="detail-item"><label>Tanggal : </label>
+              <br>
+
+              <span>{{ selectedEvidence.tanggal }}</span></div>
             </div>
           </div>
           <div class="modal-footer">
