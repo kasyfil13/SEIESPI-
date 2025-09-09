@@ -11,6 +11,7 @@ export class EvidenceService {
     { id: 3, temuan: 'Serah terima tugas tidak terekam', rekomendasi: 'Membuat log serah terima', status: 'Signed', kriteria: 'Keakuratan', progress: 'Tercapai', tanggal: '08-09-2025' }
   ];
 
+  
   getAll(): Evidence[] { return this.evidences; }
   getById(id: number): Evidence | undefined { return this.evidences.find(e => e.id === id); }
   add(evidence: Evidence): number {
