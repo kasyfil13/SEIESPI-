@@ -17,20 +17,24 @@ export class ReviewsComponent {
   evidences: Evidence[] = [];
   evidence?: Evidence;
 
-  constructor(private route: ActivatedRoute, private evidenceSvc: EvidenceService) {
-    this.route.paramMap.subscribe(params => {
-      const id = params.get('id');
-      if (id) {
-        // kalau ada id → tampilkan detail
-        this.evidence = this.evidenceSvc.getById(Number(id));
+constructor(private route: ActivatedRoute, private evidenceSvc: EvidenceService) {
+  this.route.paramMap.subscribe(params => {
+    const id = params.get('id');
+    if (id) {
+      // kalau ada id → tampilkan detail
+      this.evidenceSvc.getById(Number(id)).subscribe(e => {
+        this.evidence = e;
         this.evidences = [];
-      } else {
-        // kalau nggak ada id → tampilkan semua
-        this.evidences = this.evidenceSvc.getAll();
+      });
+    } else {
+      this.evidenceSvc.getAll().subscribe(data => {
+        this.evidences = data;
         this.evidence = undefined;
-      }
-    });
-  }
+      });
+    }
+  });
+}
+
 
   downloadPDF(evidence: Evidence) {
   const pdf = new jsPDF();

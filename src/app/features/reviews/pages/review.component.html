@@ -27,7 +27,7 @@
 <ng-template #listAll>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     <div *ngFor="let e of evidences" 
-         class="bg-white shadow-lg rounded-2xl p-5 border border-gray-200 hover:shadow-xl hover:scale-105 transform transition duration-300">
+        class="bg-white shadow-lg rounded-2xl p-5 border border-gray-200 hover:shadow-xl hover:scale-105 transform transition duration-300">
       <h3 class="text-lg font-semibold mb-3 text-blue-500">{{ e.temuan }}</h3>
       <p class="text-sm text-gray-600 mb-1"><b>Rekomendasi:</b> {{ e.rekomendasi }}</p>
       <p class="text-sm text-gray-600 mb-1"><b>Status:</b> {{ e.status }}</p>

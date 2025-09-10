@@ -29,7 +29,7 @@ import jsPDF from 'jspdf';
           <div class="card-body">
             <h3 class="card-title">{{ e.temuan }}</h3>
             <h4 class="progress">Progress : </h4>
-            <span class="status-badge" [ngClass]="getStatusClass(e.progress)">
+            <span class="status-progress" [ngClass]="getStatusClass(e.progress)">
               {{ getStatusText(e.progress) }}
             </span>
           </div>
@@ -65,37 +65,37 @@ import jsPDF from 'jspdf';
       </div>
     </div>
   `,
-  styles: [`
+styles: [`
     * { box-sizing: border-box; margin:0; padding:0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
-    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-    .title { font-size: 2rem; font-weight: 700; color: #fff; }
-    .add-btn { background-color: #22c55e; color: #fff; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; transition: all 0.2s ease; }
+    .container { max-width: 1200px; margin: 32px auto; padding: 0 16px; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+    .title { font-size: 32px; font-weight: 700; color: #fff; }
+    .add-btn { background-color: #22c55e; color: #fff; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.2s ease; }
     .add-btn:hover { background-color: #1d4ed8; }
 
     .card-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; justify-content: start;}
-    .card { background-color: #0f1e17; border-radius: 0.75rem; border: 3px solid #22c55e; box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s; }
+    .card { background-color: #0f1e17; border-radius: 12px; border: 3px solid #22c55e; box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s; }
     .card:hover { transform: translateY(-5px); }
-    .card-body { padding: 1rem; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
-    .card-title { font-size: 25px; font-weight: 700; color: #fff; margin-bottom: 15px; margin-top: 15px; }
-    .progress-text { font-size: 0.875rem; color: #fff; }
+    .card-body { padding: 16px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .card-title { font-size: 25px; font-weight: 700; color: #fff; margin-bottom: 15px; margin-top: 10px; }
+    .progress-text { font-size: 14px; color: #fff; }
 
-    .card-footer { padding: 0.75rem 1rem 1rem; }
-    .btn-detail { width: 100%; padding: 0.5rem; border: none; border-radius: 0.5rem; background-color: #22c55e; color: #fff; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+    .card-footer { padding: 12px 16px 16px; }
+    .btn-detail { width: 100%; padding: 8px; border: none; border-radius: 8px; background-color: #22c55e; color: #fff; font-weight: 600; cursor: pointer; transition: background 0.2s; }
     .btn-detail:hover { background-color: #2563eb; }
 
     .modal-overlay { position: fixed; inset:0; background-color: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; z-index: 1000; }
-    .modal { background-color: #fff; border-radius: 1rem; width: 100%; max-width: 600px; display: flex; flex-direction: column; max-height: 90vh; overflow-y: auto; }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; }
-    .modal-header h3 { font-size: 1.875rem; color: #1f2937; }
-    .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #6b7280; }
-    .modal-body { padding: 1rem 1.5rem; }
-    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
-    .detail-item label { font-size: 0.75rem; font-weight: 600; color: #6b7280; }
-    .detail-item span { font-size: 0.875rem; color: #111827; font-weight: 500; }
-    .modal-footer { display: flex; justify-content: flex-end; gap: 0.5rem; padding: 1rem 1.5rem; border-top: 1px solid #e5e7eb; }
+    .modal { background-color: #fff; border-radius: 16px; width: 100%; max-width: 600px; display: flex; flex-direction: column; max-height: 90vh; overflow-y: auto; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; }
+    .modal-header h3 { font-size: 30px; color: #1f2937; }
+    .close-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: #6b7280; }
+    .modal-body { padding: 16px 24px; }
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .detail-item label { font-size: 12px; font-weight: 600; color: #6b7280; }
+    .detail-item span { font-size: 14px; color: #111827; font-weight: 500; }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 8px; padding: 16px 24px; border-top: 1px solid #e5e7eb; }
 
-    .btn { padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 600; font-size: 0.875rem; cursor: pointer; border: none; }
+    .btn { padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; border: none; }
     .btn-edit { background-color: #22c55e; color: #fff; }
     .btn-edit:hover { background-color: #16a34a; }
     .btn-download { background-color: #3b82f6; color: #fff; }
@@ -103,9 +103,9 @@ import jsPDF from 'jspdf';
     .btn-delete { background-color: #ef4444; color: #fff; }
     .btn-delete:hover { background-color: #dc2626; }
 
-    .status-badge { 
+    .status-progress{ 
       padding: 5px 10px; 
-      border-radius: 9999px; 
+      border-radius: 90px; 
       font-size: 13px; 
       font-weight: 600; 
       color: #fff; 
@@ -117,12 +117,12 @@ import jsPDF from 'jspdf';
 
     .filter-bar {
       display: flex;
-      gap: 0.5rem;
-      margin-bottom: 1.5rem;
+      gap: 8px;
+      margin-bottom: 24px;
     }
     .filter-bar button {
-      padding: 0.4rem 0.8rem;
-      border-radius: 0.5rem;
+      padding: 6px 12px;
+      border-radius: 8px;
       border: none;
       cursor: pointer;
       background: #374151;
@@ -137,6 +137,7 @@ import jsPDF from 'jspdf';
       background: #22c55e;
     }
   `]
+
 })
 
 export class EvidenceListComponent {
@@ -145,10 +146,12 @@ export class EvidenceListComponent {
   selectedFilter: string = '';
   selectedEvidence: Evidence | null = null;
 
-  constructor(private svc: EvidenceService) {
-    this.evidences = this.svc.getAll();
-    this.filteredEvidences = [...this.evidences];
-  }
+constructor(private svc: EvidenceService) {
+  this.svc.getAll().subscribe(data => {
+    this.evidences = data;
+    this.filteredEvidences = [...this.evidences]; 
+  });
+}
 
   setFilter(progress: string) {
     this.selectedFilter = progress;
@@ -176,25 +179,49 @@ export class EvidenceListComponent {
     return 'Belum Mulai';
   }
 
-  delete(id: number) {
-    this.svc.delete(id);
-    this.evidences = this.svc.getAll();
-    this.setFilter(this.selectedFilter); // refresh filtered list
+delete(id: number) {
+  this.svc.delete(id).subscribe(() => {
+    this.svc.getAll().subscribe(data => {
+      this.evidences = data;
+      this.setFilter(this.selectedFilter);
+    });
     if (this.selectedEvidence?.id === id) this.closeModal();
-  }
-
-  downloadPDF(evidence: Evidence) {
-    const pdf = new jsPDF();
-    pdf.setFontSize(16);
-    pdf.text('Detail Evidence', 10, 10);
-    pdf.setFontSize(12);
-    pdf.text(`ID: ${evidence.id}`, 10, 20);
-    pdf.text(`Temuan: ${evidence.temuan}`, 10, 30);
-    pdf.text(`Rekomendasi: ${evidence.rekomendasi}`, 10, 40);
-    pdf.text(`Status: ${evidence.status}`, 10, 50);
-    pdf.text(`Kriteria: ${evidence.kriteria}`, 10, 60);
-    pdf.text(`Progress: ${evidence.progress}`, 10, 70);
-    pdf.text(`Tanggal: ${evidence.tanggal}`, 10, 80);
-    pdf.save(`evidence-${evidence.id}.pdf`);
-  }
+  });
 }
+downloadPDF(evidence: Evidence) {
+  const pdf = new jsPDF();
+
+  //headernya
+  pdf.setFillColor(41, 128, 185); 
+  pdf.rect(10, 10, 190, 12, 'F'); 
+  pdf.setTextColor(255, 255, 255); 
+  pdf.setFontSize(16);
+  pdf.setFont('helvetica', 'bold');
+  pdf.text('Detail Evidence', 12, 19);
+
+  //isinya
+  pdf.setFontSize(12);
+  pdf.setTextColor(0, 0, 0);
+  let y = 30; 
+  const lineSpacing = 10;
+
+  const addField = (label: string, value: any) => {
+    pdf.setFont('helvetica', 'bold');
+    pdf.text(`${label}:`, 10, y);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text(`${value}`, 50, y);
+    y += lineSpacing;
+  };
+
+  addField('ID', evidence.id);
+  addField('Temuan', evidence.temuan);
+  addField('Rekomendasi', evidence.rekomendasi);
+  addField('Status', evidence.status);
+  addField('Kriteria', evidence.kriteria);
+  addField('Progress', evidence.progress);
+  addField('Tanggal', evidence.tanggal);
+  pdf.setLineWidth(0.5);
+  pdf.line(10, y, 200, y);
+
+  pdf.save(`evidence-${evidence.id}.pdf`);
+}}
