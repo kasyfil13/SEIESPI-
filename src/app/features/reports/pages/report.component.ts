@@ -26,7 +26,21 @@ export class ReportsComponent {
   }
 
   downloadReport(report: Report) {
-    console.log(`Downloading: ${report.name}`);
-    alert(`Downloading ${report.name}`);
+    // Contoh isi file
+    const content = `Report Name: ${report.name}\nDate: ${report.date}`;
+    
+    // Buat Blob
+    const blob = new Blob([content], { type: 'text/plain' });
+    
+    // Buat link sementara
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${report.name}.txt`; // nama file
+    a.click();
+    
+    // Release memory
+    window.URL.revokeObjectURL(url);
   }
+
 }

@@ -18,6 +18,11 @@ export const appRoutes: Routes = [
           import('./features/evidence/evidence-routing-module').then(m => m.EvidenceRoutingModule)
       },
       {
+        path: 'audit-plan',
+        loadChildren: () =>
+          import('./features/audit-plan/audit-plan-routing-module').then(m => m.AuditPlanRoutingModule)
+      },
+      {
         path: 'reviews',
         loadChildren: () =>
           import('./features/reviews/reviews-routing-module').then(m => m.ReviewsRoutingModule)

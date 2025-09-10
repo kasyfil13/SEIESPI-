@@ -16,8 +16,16 @@ import jsPDF from 'jspdf';
         <a routerLink="new" class="add-btn">+ Add Evidence</a>
       </div>
 
+      <!-- Filter Buttons -->
+      <div class="filter-bar">
+        <button (click)="setFilter('')" [class.active]="selectedFilter === ''">Semua</button>
+        <button (click)="setFilter('Belum Tindak')" [class.active]="selectedFilter === 'Belum Tindak'">Belum Tindak</button>
+        <button (click)="setFilter('Dalam Proses')" [class.active]="selectedFilter === 'Dalam Proses'">Dalam Proses</button>
+        <button (click)="setFilter('Tercapai')" [class.active]="selectedFilter === 'Tercapai'">Tercapai</button>
+      </div>
+
       <div class="card-container">
-        <div *ngFor="let e of evidences" class="card">
+        <div *ngFor="let e of filteredEvidences" class="card">
           <div class="card-body">
             <h3 class="card-title">{{ e.temuan }}</h3>
             <h4 class="progress">Progress : </h4>
@@ -40,25 +48,12 @@ import jsPDF from 'jspdf';
           </div>
           <div class="modal-body">
             <div class="detail-grid">
-              <div class="detail-item"><label>Temuan : </label>
-              <br>
-              <span>{{ selectedEvidence.temuan }}</span></div>
-              <div class="detail-item"><label>Rekomendasi : </label>
-              <br>
-              <span>{{ selectedEvidence.rekomendasi }}</span></div>
-              <div class="detail-item"><label>Status : </label>
-              <br>
-              <span>{{ selectedEvidence.status }}</span></div>
-              <div class="detail-item"><label>Kriteria : </label>
-              <br>
-              <span>{{ selectedEvidence.kriteria }}</span></div>
-              <div class="detail-item"><label>Progress : </label>
-              <br>
-              <span>{{ selectedEvidence.progress }}</span></div>
-              <div class="detail-item"><label>Tanggal : </label>
-              <br>
-
-              <span>{{ selectedEvidence.tanggal }}</span></div>
+              <div class="detail-item"><label>Temuan : </label><br><span>{{ selectedEvidence.temuan }}</span></div>
+              <div class="detail-item"><label>Rekomendasi : </label><br><span>{{ selectedEvidence.rekomendasi }}</span></div>
+              <div class="detail-item"><label>Status : </label><br><span>{{ selectedEvidence.status }}</span></div>
+              <div class="detail-item"><label>Kriteria : </label><br><span>{{ selectedEvidence.kriteria }}</span></div>
+              <div class="detail-item"><label>Progress : </label><br><span>{{ selectedEvidence.progress }}</span></div>
+              <div class="detail-item"><label>Tanggal : </label><br><span>{{ selectedEvidence.tanggal }}</span></div>
             </div>
           </div>
           <div class="modal-footer">
@@ -68,28 +63,27 @@ import jsPDF from 'jspdf';
           </div>
         </div>
       </div>
+    </div>
   `,
   styles: [`
     * { box-sizing: border-box; margin:0; padding:0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
     .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
     .title { font-size: 2rem; font-weight: 700; color: #fff; }
-    .add-btn { background-color: #2563eb; color: #fff; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; transition: all 0.2s ease; }
+    .add-btn { background-color: #22c55e; color: #fff; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; transition: all 0.2s ease; }
     .add-btn:hover { background-color: #1d4ed8; }
 
-    .card-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
-    .card { background-color: #0f1e17; border-radius: 0.75rem; border: 3px solid; box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s; }
+    .card-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; justify-content: start;}
+    .card { background-color: #0f1e17; border-radius: 0.75rem; border: 3px solid #22c55e; box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s; }
     .card:hover { transform: translateY(-5px); }
-
     .card-body { padding: 1rem; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
-    .card-title { font-size: 25px; font-weight: 700; color: #fff; margin-bottom: 25px; }
+    .card-title { font-size: 25px; font-weight: 700; color: #fff; margin-bottom: 15px; margin-top: 15px; }
     .progress-text { font-size: 0.875rem; color: #fff; }
 
     .card-footer { padding: 0.75rem 1rem 1rem; }
     .btn-detail { width: 100%; padding: 0.5rem; border: none; border-radius: 0.5rem; background-color: #22c55e; color: #fff; font-weight: 600; cursor: pointer; transition: background 0.2s; }
     .btn-detail:hover { background-color: #2563eb; }
 
-    /* Modal */
     .modal-overlay { position: fixed; inset:0; background-color: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; z-index: 1000; }
     .modal { background-color: #fff; border-radius: 1rem; width: 100%; max-width: 600px; display: flex; flex-direction: column; max-height: 90vh; overflow-y: auto; }
     .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; }
@@ -115,19 +109,54 @@ import jsPDF from 'jspdf';
       font-size: 13px; 
       font-weight: 600; 
       color: #fff; 
-      margin-bottom: 5px; 
+      margin-bottom: -10px; 
     }
     .status-not-started { background-color: #ef4444; }
     .status-in-progress { background-color: #f59e0b; }
     .status-completed { background-color: #22c55e; }
+
+    .filter-bar {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .filter-bar button {
+      padding: 0.4rem 0.8rem;
+      border-radius: 0.5rem;
+      border: none;
+      cursor: pointer;
+      background: #374151;
+      color: white;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .filter-bar button:hover {
+      background: #2563eb;
+    }
+    .filter-bar button.active {
+      background: #22c55e;
+    }
   `]
 })
+
 export class EvidenceListComponent {
   evidences: Evidence[] = [];
+  filteredEvidences: Evidence[] = [];
+  selectedFilter: string = '';
   selectedEvidence: Evidence | null = null;
 
   constructor(private svc: EvidenceService) {
     this.evidences = this.svc.getAll();
+    this.filteredEvidences = [...this.evidences];
+  }
+
+  setFilter(progress: string) {
+    this.selectedFilter = progress;
+    if (progress) {
+      this.filteredEvidences = this.evidences.filter(e => e.progress === progress);
+    } else {
+      this.filteredEvidences = [...this.evidences];
+    }
   }
 
   openModal(e: Evidence) { this.selectedEvidence = e; }
@@ -150,6 +179,7 @@ export class EvidenceListComponent {
   delete(id: number) {
     this.svc.delete(id);
     this.evidences = this.svc.getAll();
+    this.setFilter(this.selectedFilter); // refresh filtered list
     if (this.selectedEvidence?.id === id) this.closeModal();
   }
 

@@ -1,12 +1,18 @@
+.container {
+  max-width: 1200px;
+  font-size: 20px;
+  margin-bottom: 50px;
+}
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 24px; 
+  grid-template-columns: repeat(auto-fit, 300px);
+  gap: 20px; 
+  justify-content: start;
 }
 
 .grid > div {
   background: #0f1e17;
-  border: 1px solid #e5e7eb; 
+  border: 2px solid #22c55e; 
   border-radius: 16px;
   padding: 5px 10px 20px 20px;
   box-shadow: 0 4px 6px rgba(0,0,0,0.08);
