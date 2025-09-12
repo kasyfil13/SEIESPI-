@@ -61,11 +61,29 @@ export class EvidenceFormComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+<<<<<<< Updated upstream
     this.id = Number(this.route.snapshot.paramMap.get('id'));
     this.isEdit = !!this.id;
+=======
+    const routeId = this.route.snapshot.paramMap.get('id');
+    this.id = routeId ? Number(routeId) : 0;
+    this.isEdit = this.id > 0;
+>>>>>>> Stashed changes
 
     const evidence = this.isEdit ? this.svc.getById(this.id) : null;
 
+<<<<<<< Updated upstream
+=======
+
+    this.initForm();
+
+    if (this.isEdit) {
+      this.loadEvidence();
+    }
+  }
+
+  private initForm() {
+>>>>>>> Stashed changes
     this.form = this.fb.group({
       id: [evidence?.id],
       temuan: [evidence?.temuan || '', Validators.required],
@@ -77,10 +95,49 @@ export class EvidenceFormComponent implements OnInit {
     });
   }
 
+<<<<<<< Updated upstream
   save() {
     if (this.form.valid) {
       this.svc.upsert(this.form.value as Evidence);
       this.router.navigate(['/evidence']);
+=======
+  private loadEvidence() {
+    this.svc.getById(this.id).subscribe({
+      next: (evidence) => {
+        console.log('Loaded evidence:', evidence);
+        
+        const dataWithId = { ...evidence, id: this.id };
+        this.form.patchValue(dataWithId);
+        
+        console.log('Form value after patch:', this.form.value);
+      },
+      error: (error) => {
+        console.error('Error loading evidence:', error);
+
+      }
+    });
+  }
+
+  onSubmit() {
+    if (this.form.valid) {
+      const formData = this.form.value as Evidence;
+      
+      console.log('Submitting form data:', formData);
+      console.log('Form ID value:', formData.id);
+
+      this.svc.upsert(formData).subscribe({
+        next: (result) => {
+          console.log('Upsert result:', result);
+          this.router.navigate(['/evidence']);
+        },
+        error: (error) => {
+          console.error('Error saving evidence:', error);
+        }
+      });
+    } else {
+      this.form.markAllAsTouched();
+      console.log('Form is invalid:', this.form.errors);
+>>>>>>> Stashed changes
     }
   }
 }

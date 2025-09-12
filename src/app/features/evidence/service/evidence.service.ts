@@ -15,9 +15,16 @@
               return this.evidences;
             }
 
+<<<<<<< Updated upstream
             getById(id: number): Evidence | undefined {
               return this.evidences.find(e => e.id === id);
             }
+=======
+  //Update evidence
+update(evidence: Evidence): Observable<any> {
+  return this.http.put(`${this.apiUrl}/${evidence.id}`, evidence);
+}
+>>>>>>> Stashed changes
 
             add(evidence: Evidence): number {
               const newId = this.evidences.length
@@ -27,12 +34,24 @@
               return newId;
             }
 
+<<<<<<< Updated upstream
             update(id: number, updated: Evidence): void {
               const index = this.evidences.findIndex(e => e.id === id);
               if (index !== -1) {
                 this.evidences[index] = { ...updated, id };
               }
             }
+=======
+  //Create evidence
+  create(evidence: Evidence): Observable<any> {
+    return this.http.post(this.apiUrl, evidence);
+  }
+  
+//Delete evidence
+delete(id: number): Observable<any> {
+  return this.http.delete(`http://localhost:3000/api/evidences/${id}`);
+}
+>>>>>>> Stashed changes
 
             delete(id: number): void {
               this.evidences = this.evidences.filter(e => e.id !== id);
