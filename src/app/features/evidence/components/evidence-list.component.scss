@@ -1,65 +1,70 @@
 .audit-container {
-    padding: 1rem;
-    color: #e5e7eb;
-    background: #0f1c1a;
-    min-height: 100vh;
+  padding: 16px;
+  color: #e5e7eb;
+  background: #0f1c1a;
+  min-height: 100vh;
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+
+  input {
+    flex: 1;
+    padding: 8px;
+    border-radius: 6px;
+    border: none;
   }
-  
-  h2 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
+
+  .add-btn {
+    margin-left: 16px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    background: #166534;
+    color: white;
+    cursor: pointer;
   }
-  
-  .toolbar {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-  
-    input {
-      flex: 1;
-      padding: 0.5rem;
-      border-radius: 6px;
-      border: none;
-    }
-  
-    .add-btn {
-      margin-left: 1rem;
-      padding: 0.5rem 1rem;
-      border: none;
-      border-radius: 8px;
-      background: #166534;
-      color: white;
-      cursor: pointer;
-    }
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th, td {
+    padding: 12px;
+    border-bottom: 1px solid #374151;
   }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  
-    th, td {
-      padding: 0.75rem;
-      border-bottom: 1px solid #374151;
-    }
-  
-    th {
-      text-align: left;
-    }
+
+  th {
+    text-align: left;
   }
-  
-  .status.Draft { background: #374151; padding: 4px 8px; border-radius: 6px; }
-  .status.In\ Review { background: #4b5563; padding: 4px 8px; border-radius: 6px; }
-  .status.Signed { background: #065f46; padding: 4px 8px; border-radius: 6px; }
-  
-  .progress-BelumTindak { background: #991b1b; padding: 4px 8px; border-radius: 6px; }
+}
+
+.status.Draft { background: #374151; padding: 4px 8px; border-radius: 6px; }
+.status.In\ Review { background: #4b5563; padding: 4px 8px; border-radius: 6px; }
+.status.Signed { background: #065f46; padding: 4px 8px; border-radius: 6px; }
+
+.progress-BelumTindak { background: #991b1b; padding: 4px 8px; border-radius: 6px; }
 .progress-DalamProses { background: #92400e; padding: 4px 8px; border-radius: 6px; }
 .progress-Tercapai    { background: #14532d; padding: 4px 8px; border-radius: 6px; }
 
-  
-  .edit-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 1rem;
-  }
-  
+.edit-btn {
+  background: none;     
+  border: none;           
+  cursor: pointer;        
+  font-size: 16px;         
+  color: #22c55e;        
+  transition: transform 0.2s, color 0.2s; 
+}
+
+.edit-btn:hover {
+  color: #166534;      
+  transform: scale(1.1);  
+}

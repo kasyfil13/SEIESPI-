@@ -1,50 +1,52 @@
-          import { Injectable } from '@angular/core';
-          import { Evidence } from '../models/evidence.model';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Evidence } from '../models/evidence.model';
 
-          @Injectable({
-            providedIn: 'root'
-          })
-          export class EvidenceService {
-            private evidences: Evidence[] = [
-              { id: 1, temuan: 'Tidak ada dokumen autentik', rekomendasi: 'Menggunakan tanda tangan digital', status: 'Draft', kriteria: 'Kepatuhan', progress: 'Belum Tindak',tanggal: '08-09-2025' },
-              { id: 2, temuan: 'Dokumentasi SOP tidak lengkap', rekomendasi: 'Melengkapi dokumentasi SOP', status: 'In Review', kriteria: 'Efisiensi', progress: 'Dalam Proses',tanggal: '08-09-2025' },
-              { id: 3, temuan: 'Serah terima tugas tidak terekam', rekomendasi: 'Membuat log serah terima', status: 'Signed', kriteria: 'Keakuratan', progress: 'Tercapai', tanggal: '08-09-2025' }
-            ];
+@Injectable({
+  providedIn: 'root'
+})
+export class EvidenceService {
+  private apiUrl = 'http://localhost:3000/api/evidences';
+  
+  constructor(private http: HttpClient) {}
 
-            getAll(): Evidence[] {
-              return this.evidences;
-            }
+  getAll(): Observable<Evidence[]> { 
+    return this.http.get<Evidence[]>(this.apiUrl);
+  }
+  
+  getById(id: number): Observable<Evidence> {
+    return this.http.get<Evidence>(`${this.apiUrl}/${id}`);
+  }
 
-            getById(id: number): Evidence | undefined {
-              return this.evidences.find(e => e.id === id);
-            }
+  
+update(evidence: Evidence): Observable<any> {
+  return this.http.put(`${this.apiUrl}/${evidence.id}`, evidence);
+}
 
-            add(evidence: Evidence): number {
-              const newId = this.evidences.length
-                ? Math.max(...this.evidences.map(e => e.id)) + 1
-                : 1;
-              this.evidences.push({ ...evidence, id: newId });
-              return newId;
-            }
 
-            update(id: number, updated: Evidence): void {
-              const index = this.evidences.findIndex(e => e.id === id);
-              if (index !== -1) {
-                this.evidences[index] = { ...updated, id };
-              }
-            }
+  // NEW: Create evidence
+  create(evidence: Evidence): Observable<any> {
+    return this.http.post(this.apiUrl, evidence);
+  }
+  
+delete(id: number): Observable<any> {
+  return this.http.delete(`http://localhost:3000/api/evidences/${id}`);
+}
 
-            delete(id: number): void {
-              this.evidences = this.evidences.filter(e => e.id !== id);
-            }
 
-            // ✅ NEW: upsert (create if no id, update if id exists)
-            upsert(evidence: Evidence): number {
-              if (evidence.id) {
-                this.update(evidence.id, evidence);
-                return evidence.id;
-              } else {
-                return this.add(evidence);
-              }
-            }
-          }
+  
+  upsert(evidence: Evidence): Observable<number> { 
+    if (evidence.id) {
+      return this.update(evidence).pipe(
+        map(() => evidence.id!)
+      );
+    } else {
+      return this.create(evidence).pipe(
+        map(response => response.id)
+      );
+    }
+  }
+
+}
