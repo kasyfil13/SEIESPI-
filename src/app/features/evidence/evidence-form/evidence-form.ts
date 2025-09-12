@@ -209,7 +209,7 @@ export class EvidenceFormComponent implements OnInit {
     });
   }
 
-  onSubmit() {
+onSubmit() {
     if (this.form.valid) {
       const formData = this.form.value as Evidence;
       
@@ -223,7 +223,6 @@ export class EvidenceFormComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error saving evidence:', error);
-          // Handle error - show message to user
         }
       });
     } else {
