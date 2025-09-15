@@ -1,1 +1,43 @@
-<app-evidence-list></app-evidence-list>
+<div class="modal-backdrop">
+      <div class="modal-container">
+        <div class="modal-header">
+          <h3>Detail Evidence</h3>
+          <button class="close-button" (click)="closeModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="detail-item">
+            <span class="label">ID:</span>
+            <span class="value">{{ evidenceDetails().id }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Temuan:</span>
+            <span class="value">{{ evidenceDetails().temuan }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Rekomendasi:</span>
+            <span class="value">{{ evidenceDetails().rekomendasi }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Status:</span>
+            <span class="value">{{ evidenceDetails().status }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Kriteria:</span>
+            <span class="value">{{ evidenceDetails().kriteria }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Progress:</span>
+            <span class="value">{{ evidenceDetails().progress }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Tanggal:</span>
+            <span class="value">{{ evidenceDetails().tanggal }}</span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-edit" (click)="onEdit()">Edit</button>
+          <button class="btn btn-delete" (click)="onDelete()">Delete</button>
+          <button class="btn btn-detail" (click)="onDetail()">Detail</button>
+        </div>
+      </div>
+    </div>

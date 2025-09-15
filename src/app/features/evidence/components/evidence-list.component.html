@@ -1,67 +1,71 @@
-<div class="p-6 text-gray-100 bg-gray-900 min-h-screen">
-  <h1 class="text-3xl font-bold mb-6">Audit Evidence</h1>
+<div class="evidence-wrapper">
+  <div class="header">
+    <h2>📑 Audit Evidence</h2>
 
-  <!-- Search + Add Button -->
-  <div class="flex items-center mb-4">
-    <input
-      type="text"
-      [(ngModel)]="search"
-      placeholder="Search"
-      class="flex-1 px-4 py-2 rounded-md bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"/>
-    <button class="ml-4 px-4 py-2 bg-green-600 hover:bg-green-700 rounded-md font-medium">+ Add Evidence</button>
+    <div class="header-actions">
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        placeholder="🔍 Search evidence..."
+        class="search-box"
+      />
+
+
+      <a
+        routerLink="new"
+        class="btn-add"
+      >
+        + Add Evidence
+      </a>
+
+      <div class="flex gap-2 mb-4">
+  <button (click)="setFilter('All')" class="px-3 py-1 rounded"
+    [class.bg-green-500]="progressFilter==='All'" [class.text-white]="progressFilter==='All'">
+    All
+  </button>
+  <button (click)="setFilter('Belum Tindak')" class="px-3 py-1 rounded"
+    [class.bg-green-500]="progressFilter==='Belum Tindak'" [class.text-white]="progressFilter==='Belum Tindak'">
+    Belum Tindak
+  </button>
+  <button (click)="setFilter('Dalam Proses')" class="px-3 py-1 rounded"
+    [class.bg-green-500]="progressFilter==='Dalam Proses'" [class.text-white]="progressFilter==='Dalam Proses'">
+    Dalam Proses
+  </button>
+  <button (click)="setFilter('Tercapai')" class="px-3 py-1 rounded"
+    [class.bg-green-500]="progressFilter==='Tercapai'" [class.text-white]="progressFilter==='Tercapai'">
+    Tercapai
+  </button>
+</div>
+
+    </div>
   </div>
 
-  <div class="overflow-x-auto">
-    <table class="min-w-full border border-gray-700 rounded-lg overflow-hidden">
-      <thead class="bg-gray-800 text-gray-300 text-left text-sm uppercase">
-        <tr>
-          <th class="px-6 py-3">ID</th>
-          <th class="px-6 py-3">Temuan Pemeriksaan</th>
-          <th class="px-6 py-3">Rekomendasi</th>
-          <th class="px-6 py-3">Status</th>
-          <th class="px-6 py-3">Kriteria</th>
-          <th class="px-6 py-3">Progress Saat Ini</th>
-          <th class="px-6 py-3"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          *ngFor="let e of filteredEvidences"
-          class="border-b border-gray-700 hover:bg-gray-800"
-        >
-          <td class="px-6 py-3">{{ e.id }}</td>
-          <td class="px-6 py-3 font-semibold">{{ e.temuan }}</td>
-          <td class="px-6 py-3">{{ e.rekomendasi }}</td>
-          <td class="px-6 py-3">
-            <span
-              class="px-3 py-1 rounded-md text-sm font-medium"
-              [ngClass]="{
-                'bg-gray-700 text-gray-300': e.status === 'Draft',
-                'bg-blue-700 text-blue-100': e.status === 'In Review',
-                'bg-green-700 text-green-100': e.status === 'Signed'
-              }"
-            >
-              {{ e.status }}
-            </span>
-          </td>
-          <td class="px-6 py-3">{{ e.kriteria }}</td>
-          <td class="px-6 py-3">
-            <span
-              class="px-3 py-1 rounded-md text-sm font-medium"
-              [ngClass]="{
-                'bg-red-700 text-red-100': e.progress === 'Belum Tindak',
-                'bg-yellow-700 text-yellow-100': e.progress === 'Dalam Proses',
-                'bg-green-700 text-green-100': e.progress === 'Tercapai'
-              }"
-            >
-              {{ e.progress }}
-            </span>
-          </td>
-          <td class="px-6 py-3 text-right">
-            <button class="text-green-400 hover:text-green-300">✎</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="evidence-grid">
+    <div
+      class="evidence-card"
+      *ngFor="let e of filteredEvidences()"
+    >
+      <div class="card-content">
+        <div class="card-temuan">Temuan: {{ e.temuan }}</div>
+        <div class="card-progress">
+          Progress:
+          <span
+            class="badge"
+            [ngClass]="{
+              'badge-belum': e.progress === 'Belum Tindak',
+              'badge-proses': e.progress === 'Dalam Proses',
+              'badge-done': e.progress === 'Tercapai'
+            }"
+          >
+            {{ e.progress }}
+          </span>
+        </div>
+      </div>
+       <div class="card-footer">
+        <a [routerLink]="['/evidence', 'detail', e.id]" class="detail-button">
+          Lihat Detail
+        </a>
+      </div>
+    </div>
   </div>
 </div>
