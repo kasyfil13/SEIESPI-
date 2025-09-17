@@ -92,7 +92,7 @@ styles: [`
 
     .table-container {
       background-color: #0f1e17;
-      border-radius: 12px;
+      border-radius: 8px;
       border: 3px solid #22c55e;
       overflow: hidden;
       box-shadow: 0 4px 10px rgba(0,0,0,0.05);
@@ -153,15 +153,15 @@ styles: [`
     .btn-detail:hover { background-color: #2563eb; }
 
     .modal-overlay { position: fixed; inset:0; background-color: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; z-index: 1000; }
-    .modal { background-color: #fff; border-radius: 16px; width: 100%; max-width: 600px; display: flex; flex-direction: column; max-height: 90vh; overflow-y: auto; }
+    .modal { background-color: #1a2f1f; border-radius: 16px; width: 100%; max-width: 800px; display: flex; flex-direction: column; max-height: 90vh; overflow-y: auto; border: 2px solid #22c55e;}
     .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 18px 24px; margin-top: 10px }
-    .modal-header h3 { font-size: 33px; color: #1f2937; text-align: center; }
-    .close-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: #6b7280; }
+    .modal-header h3 { font-size: 33px; color: #fff; text-align: center; }
+    .close-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: #fff; }
     .modal-body { padding: 16px 24px; }
     .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .detail-item label { font-size: 16px; font-weight: 600; color: #6b7280; }
-    .detail-item span { font-size: 17px; color: #111827; font-weight: 500; }
-    .modal-footer { display: flex; justify-content: flex-end; gap: 8px; padding: 16px 24px; border-top: 1px solid #e5e7eb; }
+    .detail-item label { font-size: 12px; font-weight: 700; color: #c0c0c0; }
+    .detail-item span { font-size: 13px; color: #fff; font-weight: 500; }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 8px; padding: 16px 24px;}
 
     .btn { padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 16px; cursor: pointer; border: none; }
     .btn-edit { background-color: #22c55e; color: #fff; }

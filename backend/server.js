@@ -111,4 +111,74 @@ app.delete('/api/evidences/:id', async (req, res) => {
     }
 });
 
+app.get('/api/audit', async (req, res) => {
+    try {
+        const connection = await getConnection();
+        const [rows] = await connection.execute('SELECT * FROM audit ORDER BY id DESC');
+        await connection.end();
+        res.json(rows);
+    } catch (error) {
+        res.status(500).json({ error: 'Database error' });
+    }
+});
+
+app.get('/api/audit/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const connection = await getConnection();
+        const [rows] = await connection.execute('SELECT * FROM audit WHERE id = ?', [id]);
+        await connection.end();
+        if (rows.length === 0) return res.status(404).json({ error: 'Audit not found' });
+        res.json(rows[0]);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to get audit' });
+    }
+});
+
+app.post('/api/audit', async (req, res) => {
+    try {
+        const { auditName, category, auditee, startDate, endDate } = req.body;
+        const connection = await getConnection();
+        const [result] = await connection.execute(
+            'INSERT INTO audit (auditName, category, auditee, startDate, endDate) VALUES (?, ?, ?, ?, ?)',
+            [auditName, category, auditee, startDate, endDate]
+        );
+        await connection.end();
+        res.status(201).json({ id: result.insertId, message: 'Audit created successfully!' });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to create audit' });
+    }
+});
+
+app.put('/api/audit/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { auditName, category, auditee, startDate, endDate } = req.body;
+        const connection = await getConnection();
+        const [result] = await connection.execute(
+            'UPDATE audit SET auditName = ?, category = ?, auditee = ?, startDate = ?, endDate = ? WHERE id = ?',
+            [auditName, category, auditee, startDate, endDate, id]
+        );
+        await connection.end();
+        if (result.affectedRows === 0) return res.status(404).json({ error: 'Audit not found' });
+        res.json({ message: 'Audit updated successfully!' });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to update audit' });
+    }
+});
+
+app.delete('/api/audit/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const connection = await getConnection();
+        const [result] = await connection.execute('DELETE FROM audit WHERE id = ?', [id]);
+        await connection.end();
+        if (result.affectedRows === 0) return res.status(404).json({ error: 'Audit not found' });
+        res.json({ message: 'Deleted successfully' });
+    } catch (err) {
+        res.status(500).json({ error: 'Database error' });
+    }
+});
+
+
 app.listen(3000, () => console.log('Server jalan di http://localhost:3000'))

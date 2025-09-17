@@ -1,2 +1,96 @@
-<div class="">hi</div>
-<div class=""></div>
+<div class="container">
+<div class="header">
+    <h2>Audit Plan</h2>
+    <button class="btn-add" (click)="openModal()">Tambah Audit Plan</button>
+</div>
+
+
+  <div class="card-grid">
+    <div class="audit-card" *ngFor="let plan of auditPlans; let i = index">
+      <h3>{{plan.auditName}}</h3>
+      
+      <div class="card-content">
+        <div class="card-column">
+          <p><strong>Audit Name:</strong><br>{{plan.auditName}}</p>
+          <p><strong>Category:</strong><br>{{plan.category}}</p>
+          <p><strong>Start:</strong><br>{{plan.startDate}}</p>
+          <p><strong>End:</strong><br>{{plan.endDate}}</p>
+        </div>
+        
+        <div class="card-column">
+          <p><strong>Auditee:</strong><br>{{plan.auditee}}</p>
+          <p><strong>Lead Auditor:</strong><br>{{plan.leadAuditor}}</p>
+          <p><strong>Scope:</strong><br>{{plan.scope}}</p>
+          <p><strong>Status:</strong><br>{{plan.status}}</p>
+        </div>
+      </div>
+      
+      <div class="card-actions">
+        <button class="btn-edit" (click)="openModal(i)">Edit</button>
+        <button class="btn-delete" (click)="deletePlan(i)">Hapus</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" [style.display]="modalOpen ? 'flex' : 'none'">
+  <div class="modal-content">
+    <div class="modal-header">Tambah / Edit Audit Plan</div>
+    
+    <div class="form-group">
+    <div class="form-group">
+      <label>Audit Name</label>
+      <input type="text" [(ngModel)]="plan.auditName">
+    </div>
+    <div class="form-group">
+      <label>Category</label>
+      <input type="text" [(ngModel)]="plan.category">
+    </div>
+      <label>Start Date</label>
+      <input type="date" [(ngModel)]="plan.startDate">
+    </div>
+    <div class="form-group">
+      <label>End Date</label>
+      <input type="date" [(ngModel)]="plan.endDate">
+    </div>
+    <div class="form-group">
+      <label>Auditee</label>
+      <select [(ngModel)]="plan.auditee">
+        <option value="" disabled selected>Pilih Auditee</option>
+        <option value="Divisi Engineering">Divisi Engineering</option>
+        <option value="Divisi Marketing & Bussines Development">Divisi Marketing & Bussines Development</option>
+        <option value="Divisi Commercial Sales">Divisi Commercial Sales</option>
+        <option value="Divisi Project Planning & Controlling">Divisi Project Planning & Controlling</option>
+        <option value="Divisi Human Capital & General Affair">Divisi Human Capital & General Affair</option>
+        <option value="Divisi Information System">Divisi Information System</option>
+        <option value="Divisi Quality, Health, Safety & Environment">Divisi Quality, Health, Safety & Environment</option>
+        <option value="Divisi Internal Audit">Divisi Internal Audit</option>
+        <option value="Divisi Project Operation Management">Divisi Project Operation Management</option>
+        <option value="Divisi Operation & Maintenance">Divisi Operation & Maintenance</option>
+        <option value="Divisi Finance & Accounting">Divisi Finance & Accounting</option>
+        <option value="Divisi Corporate Strategic Planning">Divisi Corporate Strategic Planning</option>
+        <option value="Divisi Supply Chain Management">Divisi Supply Chain Management</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Lead Auditor</label>
+      <input type="text" [(ngModel)]="plan.leadAuditor">
+    </div>
+    <div class="form-group">
+      <label>Scope</label>
+      <input type="text" [(ngModel)]="plan.scope">
+    </div>
+    <div class="form-group">
+      <label>Status </label>
+        <select [(ngModel)]="plan.status">
+          <option value="" disabled selected>Pilih Statur</option>
+          <option value="Belum selesai">Belum selesai</option>
+          <option value="Selesai">Selesai</option>
+        </select>
+    </div>
+    
+    <button (click)="savePlan()">Simpan</button>
+    <button (click)="closeModal()">Batal</button>
+  </div>
+</div>
