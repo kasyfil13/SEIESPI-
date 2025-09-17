@@ -4,7 +4,7 @@ import { DashboardLayoutComponent } from './layouts/dashboard-layout/dashboard-l
 export const appRoutes: Routes = [
   {
     path: '',
-    component: DashboardLayoutComponent,   
+    component: DashboardLayoutComponent,
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       {
@@ -16,6 +16,16 @@ export const appRoutes: Routes = [
         path: 'evidence',
         loadChildren: () =>
           import('./features/evidence/evidence-routing-module').then(m => m.EvidenceRoutingModule)
+      },
+      {
+        path: 'audit-plan',
+        loadChildren: () =>
+          import('./features/audit-plan/audit-plan-routing-module').then(m => m.AuditPlanRoutingModule)
+      },
+      {
+        path: 'reviews',
+        loadChildren: () =>
+          import('./features/reviews/reviews-routing-module').then(m => m.ReviewsRoutingModule)
       },
       {
         path: 'reports',

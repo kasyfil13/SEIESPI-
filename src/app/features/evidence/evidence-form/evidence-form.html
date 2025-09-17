@@ -1,23 +1,64 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <label>
-      Temuan:
-      <input formControlName="temuan" />
-    </label>
-  
-    <label>
-      Rekomendasi:
-      <input formControlName="rekomendasi" />
-    </label>
-  
-    <label>
-      Status:
+<div class="evidence-form-wrapper">
+  <!-- Dynamic Title -->
+  <h2>
+    {{ isEdit ? '✏️ Edit Evidence' : '➕ Add Evidence' }}
+  </h2>
+
+  <!-- Evidence Form -->
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <div>
+      <label>Temuan Pemeriksaan</label>
+      <input type="text" formControlName="temuan" />
+    </div>
+
+    <div>
+      <label>Rekomendasi</label>
+      <input type="text" formControlName="rekomendasi" />
+    </div>
+
+    <div>
+      <label>Status</label>
       <select formControlName="status">
         <option value="Draft">Draft</option>
         <option value="In Review">In Review</option>
         <option value="Signed">Signed</option>
       </select>
-    </label>
-  
-    <button type="submit">Save</button>
+    </div>
+
+    <div>
+      <label>Kriteria</label>
+      <input type="text" formControlName="kriteria" />
+    </div>
+
+    <div>
+      <label>Progress</label>
+      <select formControlName="progress">
+        <option value="Belum Tindak">Belum Tindak</option>
+        <option value="Dalam Proses">Dalam Proses</option>
+        <option value="Tercapai">Tercapai</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Tanggal</label>
+      <input type="date" formControlName="tanggal" />
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button
+        type="button"
+        class="cancel"
+        (click)="cancel()"
+      >
+        Cancel
+      </button>
+      <button
+        type="submit"
+        class="save"
+      >
+        {{ isEdit ? 'Update Evidence' : 'Save Evidence' }}
+      </button>
+    </div>
   </form>
-  
+</div>

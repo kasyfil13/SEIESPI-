@@ -1,11 +1,39 @@
-<div class="p-6 text-white">
-  <h2 class="text-green-400 text-2xl font-bold mb-4">Reports</h2>
-
-  <button class="bg-green-500 px-4 py-2 rounded" (click)="generateReport()">📊 Generate Report</button>
-
-  <div *ngFor="let report of reports" class="p-4 bg-green-900 mt-4 rounded">
-    <h3>{{ report.name }}</h3>
-    <p>{{ report.date }}</p>
-    <button class="bg-blue-500 px-2 py-1 rounded" (click)="downloadReport(report)">Download</button>
+<div class="container">
+  <div class="header">
+    <h2 class="title">Review</h2>
   </div>
 </div>
+
+<div *ngIf="evidence; else listAll" id="pdfContent">
+  <div class="max-w-md mx-auto bg-white shadow-xl rounded-2xl p-6 border border-gray-200">
+    <h3 class="text-xl font-semibold mb-4 text-blue-600">Detail Evidence</h3>
+    <div class="space-y-2 text-gray-700">
+      <p><span class="font-semibold text-gray-800">ID:</span> {{ evidence.id }}</p>
+      <p><span class="font-semibold text-gray-800">Temuan:</span> {{ evidence.temuan }}</p>
+      <p><span class="font-semibold text-gray-800">Rekomendasi:</span> {{ evidence.rekomendasi }}</p>
+      <p><span class="font-semibold text-gray-800">Status:</span> {{ evidence.status }}</p>
+      <p><span class="font-semibold text-gray-800">Kriteria:</span> {{ evidence.kriteria }}</p>
+      <p><span class="font-semibold text-gray-800">Progress:</span> {{ evidence.progress }}</p>
+      <p><span class="font-semibold text-gray-800">Tanggal:</span> {{ evidence.tanggal }}</p>
+    </div>
+    <button (click)="downloadPDF(evidence)"             
+            class="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+      Download PDF
+    </button>
+  </div>
+</div>
+
+<!-- List semua evidence -->
+<ng-template #listAll>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div *ngFor="let e of evidences" 
+        class="bg-white shadow-lg rounded-2xl p-5 border border-gray-200 hover:shadow-xl hover:scale-105 transform transition duration-300">
+      <h3 class="text-lg font-semibold mb-3 text-blue-500">{{ e.temuan }}</h3>
+      <p class="text-sm text-gray-600 mb-1"><b>Rekomendasi:</b> {{ e.rekomendasi }}</p>
+      <p class="text-sm text-gray-600 mb-1"><b>Status:</b> {{ e.status }}</p>
+      <p class="text-sm text-gray-600 mb-1"><b>Kriteria:</b> {{ e.kriteria }}</p>
+      <p class="text-sm text-gray-600 mb-1"><b>Progress:</b> {{ e.progress }}</p>
+      <p class="text-sm text-gray-600"><b>Tanggal:</b> {{ e.tanggal }}</p>
+    </div>
+  </div>
+</ng-template>

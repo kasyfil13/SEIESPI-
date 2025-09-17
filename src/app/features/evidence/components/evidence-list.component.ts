@@ -1,40 +1,48 @@
-// src/app/features/evidence/pages/evidence-list.component.ts
+// src/app/features/evidence/evidence-list.component.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { EvidenceService } from '../service/evidence.service';
 import { Evidence } from '../models/evidence.model';
 
 @Component({
   selector: 'app-evidence-list',
-  imports: [CommonModule, RouterModule],
-  template: `
-    <h2 class="text-2xl mb-4">Evidence List</h2>
-    <a routerLink="new" class="bg-blue-600 text-white px-3 py-1 rounded">+ Add Evidence</a>
-
-    <div *ngFor="let e of evidences" class="bg-white p-4 mt-4 rounded shadow">
-      <h3 class="font-bold">{{ e.temuan }}</h3>
-      <p><strong>Rekomendasi:</strong> {{ e.rekomendasi }}</p>
-      <p><strong>Status:</strong> {{ e.status }}</p>
-      <p><strong>Kriteria:</strong> {{ e.kriteria }}</p>
-      <p><strong>Progress:</strong> {{ e.progress }}</p>
-      <p class="text-sm text-gray-500">{{ e.tanggal }}</p>
-      <div class="mt-2">
-        <a [routerLink]="['/evidence/edit', e.id]" class="bg-yellow-500 text-white px-2 py-1 rounded">Edit</a>
-        <button (click)="delete(e.id)" class="bg-red-600 text-white px-2 py-1 rounded">Delete</button>
-      </div>
-    </div>
-  `
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterModule],
+  templateUrl: './evidence-list.component.html',
+  styleUrls: ['./evidence-list.component.scss']
 })
 export class EvidenceListComponent {
   evidences: Evidence[] = [];
+  searchTerm = '';
+  progressFilter: string = 'All';  // 👈 added filter state
 
-  constructor(private svc: EvidenceService) {
-    this.evidences = this.svc.getAll();
+  constructor(private evidenceService: EvidenceService) {}
+
+  async ngOnInit() {
+    this.evidences = await this.evidenceService.getAll();
+    console.log('📌 evidences in component:', this.evidences);
   }
 
-  delete(id: number) {
-    this.svc.delete(id);
-    this.evidences = this.svc.getAll(); // refresh
+  setFilter(filter: string) {
+    this.progressFilter = filter;
+  }
+
+  filteredEvidences() {
+    return this.evidences.filter(e => {
+      const matchesSearch =
+        !this.searchTerm || e.temuan.toLowerCase().includes(this.searchTerm.toLowerCase());
+
+      const matchesFilter =
+        this.progressFilter === 'All' || e.progress === this.progressFilter;
+
+      return matchesSearch && matchesFilter;
+    });
+  }
+
+  async delete(id: number) {
+    await this.evidenceService.delete(id);
+    this.evidences = await this.evidenceService.getAll(); // refresh
   }
 }
