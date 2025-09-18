@@ -54,3 +54,58 @@
     </button>
   </form>
 </div>
+<div class="mt-10">
+  <h2 class="text-green-600 text-2xl font-bold mb-4">Email History</h2>
+  <div *ngIf="emailHistories.length === 0" class="text-green-300 italic">
+    Belum ada history email.
+  </div>
+  <table *ngIf="emailHistories.length > 0"
+         class="w-full text-left border-collapse bg-green-900 rounded overflow-hidden">
+    <thead class="bg-green-700 text-green-200">
+      <tr>
+        <th class="p-2">No.</th>
+        <th class="p-2">Email To</th>
+        <th class="p-2">Evidence ID</th>
+        <th class="p-2">Message</th>
+        <th class="p-2">Status</th>
+        <th class="p-2">Sent At</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let h of emailHistories; let i = index" class="border-b border-green-700">
+        <td class="p-2">{{ i+1 }}</td>
+        <td class="p-2">{{ h.email_to }}</td>
+        <td class="p-2 clickable-cell" (click)="openEvidenceModal(h.evidenceId)">
+          {{ h.evidenceId }}
+        </td>
+
+        <td class="p-2">{{ h.message | slice:0:50}}{{ h.message.length > 50 ? '...' : '' }}</td>
+        <td class="p-2">
+          <span [ngClass]="{
+            'status-success': h.status === 'SUCCESS',
+            'status-failed': h.status === 'FAILED'
+          }">
+            {{ h.status }}
+          </span>
+        </td>
+        <td class="p-2">{{ h.sentAt | date:'dd-MM-yyyy HH:mm' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div *ngIf="modalOpen" class="modal-overlay">
+  <div class="modal-container">
+    <button class="modal-close" (click)="closeModal()">×</button>
+    <h3 class="text-green-400 text-xl font-bold mb-4">Detail Evidence</h3>
+    <div class="modal-content space-y-2">
+      <p><strong>ID:</strong><br> {{modalEvidence?.id}}</p>
+      <p><strong>Status:</strong><br> {{modalEvidence?.status}}</p>
+      <p><strong>Progress:</strong><br> {{modalEvidence?.progress}}</p>
+      <p><strong>Tanggal:</strong><br> {{modalEvidence?.tanggal | date:'dd-MM-yyyy'}}</p>
+      <p><strong>Temuan:</strong><br> {{modalEvidence?.temuan}}</p>
+      <p><strong>Rekomendasi:</strong><br>  {{modalEvidence?.rekomendasi}}</p>
+      <p><strong>Kriteria:</strong><br>  {{modalEvidence?.kriteria}}</p>
+    </div>
+  </div>
+</div>

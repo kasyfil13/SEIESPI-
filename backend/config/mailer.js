@@ -3,8 +3,8 @@ const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: '', //email
-        pass: '' //pass -> kalau mau coba pake gamil harus verif 2 langkah dlu yaa
+        user: 'nauranisa1204@gmail.com', //email
+        pass: 'lfqn rxmd oxfi sewd' //pass -> kalau mau coba pake gamil harus verif 2 langkah dlu yaa
     }
 });
 
