@@ -1,67 +1,69 @@
-for<div class="p-6 text-gray-100 bg-gray-900 min-h-screen">
-  <h1 class="text-3xl font-bold mb-6">Audit Evidence</h1>
+<form (ngSubmit)="addEvidence()" #evidenceForm="ngForm" class="mb-4">
+  <select name="temuan" [(ngModel)]="newEvidence.rekomendasi.temuan" required>
+    <option [ngValue]="null">Pilih Temuan</option>
+    <option *ngFor="let t of temuanList" [ngValue]="t">{{ t.temuan }}</option>
+  </select>
+  <input type="text" name="evidence_name" [(ngModel)]="newEvidence.evidence_name" placeholder="Judul Evidence" required>
+  <input type="text" name="rekomendasi" [(ngModel)]="newEvidence.rekomendasi.deskripsi" placeholder="Rekomendasi" required>
+  <select name="kriteria" [(ngModel)]="newEvidence.rekomendasi.kriteria" required>
+    <option value="Prosedur">Pilih Kriteria</option>
+    <option value="Prosedur">Prosedur</option>
+    <option value="Dokumen">Dokumen</option>
+    <option value="Evaluasi ERP">Evaluasi ERP</option>
+    <option value="Need extra support">Need extra support</option>
+    <option value="Tambahan Personil">Tambahan Personil</option>
+    <option value="Penyusunan PKPT">Penyusunan PKPT</option>
+    <option value="Pelatihan / Sertifikasi SPI">Pelatihan / Sertifikasi SPI</option>
+    <option value="Share drive / Server Proyek">Share drive / Server Proyek</option>
+    <option value="RO / RK">RO / RK</option>
+    <option value="SKEP">SKEP</option>
+    <option value="Manrisk">Manrisk</option>
+    <option value="Sanksi">Sanksi</option>
+    <option value="Revisi SIK">Revisi SIK</option>
+    <option value="Tanda Tangan">Tanda Tangan</option>
+  </select>
+  <input type="number" name="progress" [(ngModel)]="newEvidence.progress_bulan_ini" placeholder="Progress Bulan Ini">
+  <select name="status" [(ngModel)]="newEvidence.status_saat_ini" required>
+    <option value="Belum Selesai">Pilih Status</option>
+    <option value="Selesai">Selesai</option>
+    <option value="Belum Selesai">Belum Selesai</option>
+  </select>
+  <button type="submit">Tambah</button>
+</form>
 
-  <!-- Search + Add Button -->
-  <div class="flex items-center mb-4">
-    <input
-      type="text"
-      [(ngModel)]="search"
-      placeholder="Search"
-      class="flex-1 px-4 py-2 rounded-md bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"/>
-    <button class="ml-4 px-4 py-2 bg-green-600 hover:bg-green-700 rounded-md font-medium">+ Add Evidence</button>
-  </div>
-
-  <div class="overflow-x-auto">
-    <table class="min-w-full border border-gray-700 rounded-lg overflow-hidden">
-      <thead class="bg-gray-800 text-gray-300 text-left text-sm uppercase">
-        <tr>
-          <th class="px-6 py-3">ID</th>
-          <th class="px-6 py-3">Temuan Pemeriksaan</th>
-          <th class="px-6 py-3">Rekomendasi</th>
-          <th class="px-6 py-3">Status</th>
-          <th class="px-6 py-3">Kriteria</th>
-          <th class="px-6 py-3">Progress Saat Ini</th>
-          <th class="px-6 py-3"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          *ngFor="let e of filteredEvidences"
-          class="border-b border-gray-700 hover:bg-gray-800"
-        >
-          <td class="px-6 py-3">{{ e.id }}</td>
-          <td class="px-6 py-3 font-semibold">{{ e.temuan }}</td>
-          <td class="px-6 py-3">{{ e.rekomendasi }}</td>
-          <td class="px-6 py-3">
-            <span
-              class="px-3 py-1 rounded-md text-sm font-medium"
-              [ngClass]="{
-                'bg-gray-700 text-gray-300': e.status === 'Draft',
-                'bg-blue-700 text-blue-100': e.status === 'In Review',
-                'bg-green-700 text-green-100': e.status === 'Signed'
-              }"
-            >
-              {{ e.status }}
-            </span>
-          </td>
-          <td class="px-6 py-3">{{ e.kriteria }}</td>
-          <td class="px-6 py-3">
-            <span
-              class="px-3 py-1 rounded-md text-sm font-medium"
-              [ngClass]="{
-                'bg-red-700 text-red-100': e.progress === 'Belum Tindak',
-                'bg-yellow-700 text-yellow-100': e.progress === 'Dalam Proses',
-                'bg-green-700 text-green-100': e.progress === 'Tercapai'
-              }"
-            >
-              {{ e.progress }}
-            </span>
-          </td>
-          <td class="px-6 py-3 text-right">
-            <button class="text-green-400 hover:text-green-300">✎</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+<table>
+  <thead>
+    <tr>
+      <th>No.</th>
+      <th>Temuan Pemeriksaan</th>
+      <th>Judul Evidence</th>
+      <th>Rekomendasi</th>
+      <th>Progress Bulan Ini</th>
+      <th>Progress Saat Ini</th>
+      <th>Status Saat Ini</th>
+      <th>Kriteria</th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container *ngFor="let group of groupedEvidence; let i = index">
+      <tr>
+        <td [attr.rowspan]="group.evidence.length">{{ i + 1 }}</td>
+        <td [attr.rowspan]="group.evidence.length">{{ group.temuan }}</td>
+        <td>{{ group.evidence[0].evidence_name }}</td>
+        <td>{{ group.evidence[0].rekomendasi.deskripsi }}</td>
+        <td>{{ group.evidence[0].progress_bulan_ini }} %</td>
+        <td>{{ group.evidence[0].progress_bulan_ini }} %</td>
+        <td>{{ group.evidence[0].status_saat_ini }}</td>
+        <td>{{ group.evidence[0].rekomendasi.kriteria }}</td>
+      </tr>
+      <tr *ngFor="let e of group.evidence.slice(1)">
+        <td>{{ e.evidence_name }}</td>
+        <td>{{ e.rekomendasi.deskripsi }}</td>
+        <td>{{ e.progress_bulan_ini }} %</td>
+        <td>{{ e.progress_bulan_ini }} %</td>
+        <td>{{ e.status_saat_ini }}</td>
+        <td>{{ e.rekomendasi.kriteria }}</td>
+      </tr>
+    </ng-container>
+  </tbody>
+</table>

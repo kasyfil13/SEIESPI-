@@ -8,8 +8,8 @@ import { EvidenceComponent } from './pages/evidence.page.component';
   imports: [
     CommonModule,
     FormsModule,
-    EvidenceComponent ,
-    EvidenceListComponent
+    EvidenceListComponent, 
+    EvidenceComponent   
   ]
 })
 export class EvidenceModule {}

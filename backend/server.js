@@ -1,284 +1,85 @@
 const express = require('express');
+const cors = require('cors');
 const getConnection = require('./config/database');
-const sendEmail = require('./config/mailer');
 
 const app = express();
-
 app.use(express.json());
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    next();
+
+app.use(cors({
+  origin: 'http://localhost:4200',
+  methods: ['GET','POST','PUT','DELETE','OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// GET semua evi
+app.get('/api/evidence', async (req, res) => {
+  const db = await getConnection(); // <- ini yang missing
+  const sql = `
+    SELECT e.id AS evidence_id, e.evidence_name, e.status_saat_ini, e.progress_bulan_ini,
+           r.id AS rekomendasi_id, r.deskripsi, r.kriteria,
+           t.id AS temuan_id, t.temuan
+    FROM evidence e
+    JOIN rekomendasi r ON e.rekomendasi_id = r.id
+    JOIN temuanpemeriksaan t ON r.temuan_id = t.id
+  `;
+
+  const [rows] = await db.query(sql);
+  const data = rows.map(r => ({
+    id: r.evidence_id,
+    evidence_name: r.evidence_name,
+    status_saat_ini: r.status_saat_ini,
+    progress_bulan_ini: r.progress_bulan_ini,
+    rekomendasi: {
+      id: r.rekomendasi_id,
+      deskripsi: r.deskripsi,
+      kriteria: r.kriteria,
+      temuan: {
+        id: r.temuan_id,
+        temuan: r.temuan
+      }
+    }
+  }));
+
+  res.json(data);
 });
 
-// Evidence Routes
+// POST evi ke db
+app.post('/api/evidence', async (req, res) => {
+  try {
+    const db = await getConnection();
+    const { evidence_name, status_saat_ini, progress_bulan_ini, rekomendasi } = req.body;
 
-// GET semua evidence
-app.get('/api/evidences', async (req, res) => {
-    try {
-        const connection = await getConnection();
-        const [rows] = await connection.execute(
-            'SELECT * FROM evidences ORDER BY id DESC'
-        );
-        await connection.end();
-        res.json(rows);
-    } catch (error) {
-        console.error('Get evidences error:', error);
-        res.status(500).json({ error: 'Database error' });
-    }
+    const [temuanResult] = await db.query(
+      'INSERT INTO temuanpemeriksaan (temuan) VALUES (?)',
+      [rekomendasi.temuan.temuan]
+    );
+
+    const temuanId = temuanResult.insertId;
+
+    const [rekomResult] = await db.query(
+      'INSERT INTO rekomendasi (deskripsi, kriteria, temuan_id) VALUES (?, ?, ?)',
+      [rekomendasi.deskripsi, rekomendasi.kriteria, temuanId]
+    );
+
+    const rekomId = rekomResult.insertId;
+
+    const [evidenceResult] = await db.query(
+      'INSERT INTO evidence (evidence_name, status_saat_ini, progress_bulan_ini, rekomendasi_id) VALUES (?, ?, ?, ?)',
+      [evidence_name, status_saat_ini, progress_bulan_ini, rekomId]
+    );
+
+    res.json({ message: 'Evidence berhasil ditambahkan' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
 });
 
-// POST tambah evidence
-app.post('/api/evidences', async (req, res) => {
-    try {
-        const { temuan, rekomendasi, status, kriteria, progress, tanggal } = req.body;
-
-        const connection = await getConnection();
-        const [result] = await connection.execute(
-            `INSERT INTO evidences 
-            (temuan, rekomendasi, status, kriteria, progress, tanggal) 
-            VALUES (?, ?, ?, ?, ?, ?)`,
-            [temuan, rekomendasi, status || 'Draft', kriteria, progress, tanggal]
-        );
-        await connection.end();
-
-        res.status(201).json({
-            id: result.insertId,
-            message: 'Evidence created successfully!'
-        });
-    } catch (error) {
-        console.error('Create evidence error:', error);
-        res.status(500).json({ error: 'Failed to create evidence' });
-    }
-});
-
-// GET evidence sesuai ID
-app.get('/api/evidences/:id', async (req, res) => {
-    try {
-        const { id } = req.params;
-        const connection = await getConnection();
-        const [rows] = await connection.execute(
-            'SELECT * FROM evidences WHERE id = ?',
-            [id]
-        );
-        await connection.end();
-
-        if (rows.length === 0) {
-            return res.status(404).json({ error: 'Evidence not found' });
-        }
-        res.json(rows[0]);
-    } catch (error) {
-        console.error('Get evidence error:', error);
-        res.status(500).json({ error: 'Failed to get evidence' });
-    }
-});
-
-// PUT update evidence
-app.put('/api/evidences/:id', async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { temuan, rekomendasi, status, kriteria, progress, tanggal } = req.body;
-
-        const connection = await getConnection();
-        const [result] = await connection.execute(
-            `UPDATE evidences 
-             SET temuan = ?, rekomendasi = ?, status = ?, kriteria = ?, progress = ?, tanggal = ?
-             WHERE id = ?`,
-            [temuan, rekomendasi, status, kriteria, progress, tanggal, id]
-        );
-        await connection.end();
-
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ error: 'Evidence not found' });
-        }
-        res.json({ message: 'Evidence updated successfully!' });
-    } catch (error) {
-        console.error('Update evidence error:', error);
-        res.status(500).json({ error: 'Failed to update evidence' });
-    }
-});
-
-// DELETE evidence
-app.delete('/api/evidences/:id', async (req, res) => {
-    try {
-        const { id } = req.params;
-
-        const connection = await getConnection();
-        const [result] = await connection.execute(
-            'DELETE FROM evidences WHERE id = ?',
-            [id]
-        );
-        await connection.end();
-
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ error: 'Evidence not found' });
-        }
-        res.json({ message: 'Evidence deleted successfully' });
-    } catch (error) {
-        console.error('Delete evidence error:', error);
-        res.status(500).json({ error: 'Database error' });
-    }
-});
-
-// Email Routes
-
-// POST kirim email
-app.post('/api/send-email', async (req, res) => {
-    console.log('Request body:', req.body);
-    const { to, subject, text, html } = req.body;
-
-    try {
-        const info = await sendEmail({ to, subject, text, html });
-        console.log('Email berhasil dikirim:', info.response);
-        res.status(200).json({ message: 'Email sent!', info: info.response });
-    } catch (err) {
-        console.error('Send email error detail:', err);
-        res.status(500).json({ error: err.message });
-    }
-});
-
-
-// POST simpen email history
-app.post('/api/email-history', async (req, res) => {
-    try {
-        const { to, evidenceId, message, status, sentAt } = req.body;
-
-        const connection = await getConnection();
-        const [result] = await connection.execute(
-            `INSERT INTO report
-            (email_to, evidenceId, message, status, sentAt) 
-            VALUES (?, ?, ?, ?, ?)`,
-            [to, evidenceId, message, status, sentAt]
-        );
-        await connection.end();
-
-        res.status(201).json({ id: result.insertId, message: 'History saved!' });
-    } catch (error) {
-        console.error('Save history error:', error);
-        res.status(500).json({ error: 'Failed to save email history' });
-    }
-});
-
-// GET semua email history
-app.get('/api/email-history', async (req, res) => {
-    try {
-        const connection = await getConnection();
-        const [rows] = await connection.execute(
-            'SELECT * FROM report ORDER BY sentAt DESC'
-        );
-        await connection.end();
-        res.json(rows);
-    } catch (error) {
-        console.error('Get history error:', error);
-        res.status(500).json({ error: 'Failed to load email history' });
-    }
-});
-
-// Audit Routes
-
-// GET semua audits
-app.get('/api/audit', async (req, res) => {
-    try {
-        const connection = await getConnection();
-        const [rows] = await connection.execute(
-            'SELECT * FROM audit ORDER BY id DESC'
-        );
-        await connection.end();
-        res.json(rows);
-    } catch (error) {
-        console.error('Get audits error:', error);
-        res.status(500).json({ error: 'Database error' });
-    }
-});
-
-// GET audit sesuai ID
-app.get('/api/audit/:id', async (req, res) => {
-    try {
-        const { id } = req.params;
-
-        const connection = await getConnection();
-        const [rows] = await connection.execute(
-            'SELECT * FROM audit WHERE id = ?',
-            [id]
-        );
-        await connection.end();
-
-        if (rows.length === 0) {
-            return res.status(404).json({ error: 'Audit not found' });
-        }
-        res.json(rows[0]);
-    } catch (error) {
-        console.error('Get audit error:', error);
-        res.status(500).json({ error: 'Failed to get audit' });
-    }
-});
-
-// POST tambah audit
-app.post('/api/audit', async (req, res) => {
-    try {
-        const { auditName, category, auditee, startDate, endDate } = req.body;
-
-        const connection = await getConnection();
-        const [result] = await connection.execute(
-            `INSERT INTO audit (auditName, category, auditee, startDate, endDate)
-             VALUES (?, ?, ?, ?, ?)`,
-            [auditName, category, auditee, startDate, endDate]
-        );
-        await connection.end();
-
-        res.status(201).json({ id: result.insertId, message: 'Audit created successfully!' });
-    } catch (error) {
-        console.error('Create audit error:', error);
-        res.status(500).json({ error: 'Failed to create audit' });
-    }
-});
-
-// PUT update audit
-app.put('/api/audit/:id', async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { auditName, category, auditee, startDate, endDate } = req.body;
-
-        const connection = await getConnection();
-        const [result] = await connection.execute(
-            `UPDATE audit 
-             SET auditName = ?, category = ?, auditee = ?, startDate = ?, endDate = ?
-             WHERE id = ?`,
-            [auditName, category, auditee, startDate, endDate, id]
-        );
-        await connection.end();
-
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ error: 'Audit not found' });
-        }
-        res.json({ message: 'Audit updated successfully!' });
-    } catch (error) {
-        console.error('Update audit error:', error);
-        res.status(500).json({ error: 'Failed to update audit' });
-    }
-});
-
-// DELETE audit
-app.delete('/api/audit/:id', async (req, res) => {
-    try {
-        const { id } = req.params;
-
-        const connection = await getConnection();
-        const [result] = await connection.execute(
-            'DELETE FROM audit WHERE id = ?',
-            [id]
-        );
-        await connection.end();
-
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ error: 'Audit not found' });
-        }
-        res.json({ message: 'Audit deleted successfully' });
-    } catch (error) {
-        console.error('Delete audit error:', error);
-        res.status(500).json({ error: 'Database error' });
-    }
+//get temuanpemeriksaan
+app.get('/api/temuan', async (req, res) => {
+  const db = await getConnection();
+  const [rows] = await db.query('SELECT id, temuan FROM temuanpemeriksaan');
+  res.json(rows);
 });
 
 app.listen(3000, () => console.log('🚀 Server jalan di http://localhost:3000'));
